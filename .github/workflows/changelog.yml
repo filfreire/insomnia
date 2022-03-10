@@ -37,7 +37,6 @@ jobs:
             --base ${{ steps.latest_release.outputs.release }} \
             --head ${HEAD} \
             --releaseName "${RELEASE_NAME}" > ./temp_changelog.out
-          echo "::set-output name=CHANGELOG_TEXT::$(cat ./temp_changelog.out)"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           OWNER: filfreire
@@ -47,6 +46,6 @@ jobs:
       - name: Debug Changelog text
         shell: bash
         run: |
-          echo ${{ steps.changelog.outputs.CHANGELOG_TEXT }}
+          cat ./temp_changelog.out
 
       # TODO create/update comment with CHANGELOG_TEXT on PR that has ${{ env.GITHUB_REF_NAME }}
