@@ -40,9 +40,9 @@ jobs:
           echo "::set-output name=CHANGELOG_TEXT::$(cat ./temp_changelog.out)"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          OWNER: ${{ env.GITHUB_REPOSITORY_OWNER }}
-          HEAD: ${{ env.GITHUB_SHA }}
-          RELEASE_NAME: ${{ env.GITHUB_REF_NAME }}
+          OWNER: filfreire
+          HEAD: ${{ github.sha }}
+          RELEASE_NAME: ${{ github.ref_name }}
 
       - name: Debug Changelog text
         shell: bash
