@@ -35,7 +35,7 @@ jobs:
             --owner ${OWNER} \
             --repo insomnia \
             --base ${{ steps.latest_release.outputs.release }} \
-            --head ${COMMIT} \
+            --head ${HEAD} \
             --releaseName "${RELEASE_NAME}" > ./temp_changelog.out
           echo "::set-output name=CHANGELOG_TEXT::$(cat ./temp_changelog.out)"
         env:
