@@ -1,13 +1,12 @@
-import { test } from '../../playwright/test';
+import { invariant, test } from '../../playwright/test';
 
 test('Git Interactions (clone, checkout branch, pull, push, stage changes, ...)', async ({ page }) => {
 
     let gitSyncSmokeTestToken = process.env.GIT_SYNC_SMOKE_TEST_TOKEN;
+    // you can use `gh auth login`, and then `gh auth token`
+    // GIT_SYNC_SMOKE_TEST_TOKEN=$(gh auth token) npm run test:dev -w insomnia-smoke-test -- git-interactions
+    invariant(gitSyncSmokeTestToken, 'GIT_SYNC_SMOKE_TEST_TOKEN env variable is required for git-interactions.test.ts');
 
-    // read env variable to skip test
-    if (!gitSyncSmokeTestToken) {
-        test.skip();
-    }
 
     // generate a uuid string
     const testUUID = crypto.randomUUID();
@@ -89,11 +88,14 @@ test('Git Interactions (clone, checkout branch, pull, push, stage changes, ...)'
     await page.getByLabel('Name', { exact: true }).fill(`My Folder ${testUUID}`);
     await page.getByRole('button', { name: 'Create', exact: true }).click();
     await page.getByTestId('git-dropdown').getByLabel('Git Sync').click();
-    await page.getByRole('button', { name: ' Commit' }).click();
+    await page.getByRole('button', { name: ' Commit' }).click()
+    await page.getByText('Unversioned Objects').click();
     await page.getByRole('cell', { name: `My Folder ${testUUID}` }).locator('label').click();
+    await page.getByText('RequestGroup').click();
     await page.getByPlaceholder('A descriptive message to').click();
     await page.getByPlaceholder('A descriptive message to').fill(`commit test ${testUUID}`);
-    await page.getByText('Commit Changes').click();
+    await page.getByText('RequestGroup').click();
+    await page.getByText('Unversioned Objects').click();
     await page.getByRole('button', { name: ' Commit' }).click();
     await page.getByText('No changes to commit.').click();
     await page.getByRole('button', { name: 'Close' }).click();
